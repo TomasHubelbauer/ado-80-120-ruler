@@ -4,7 +4,7 @@ Save this as a bookmarklet in your browser's bookmark bar. Get the single-line
 version by running the below script in the browser DevTools console:
 
 ```javascript
-document.querySelector('.highlight').textContent.replace(/(\n|\s\s)/g, '')
+document.querySelector('.highlight:last-child').textContent.replace(/\n\s*/g, '')
 ```
 
 ```javascript
