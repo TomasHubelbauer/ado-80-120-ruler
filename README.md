@@ -1,6 +1,11 @@
 # Azure DevOps 80-120 Characters Wiki Editor Ruler
 
-Save this as a bookmarklet in your browser's bookmark bar (remove line breaks):
+Save this as a bookmarklet in your browser's bookmark bar. Get the single-line
+version by running the below script in the browser DevTools console:
+
+```javascript
+document.querySelector('.highlight').textContent.replace(/(\n|\s\s)/g, '')
+```
 
 ```javascript
 javascript:
