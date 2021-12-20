@@ -7,7 +7,7 @@ version by running the below script in the browser DevTools console:
 document.querySelector('.highlight').textContent.replace(/(\n|\s\s)/g, '')
 ```
 
-```javascript bookmarklet
+```javascript
 javascript:
 void function() {
   document.querySelector('textarea').style.background = `
