@@ -7,9 +7,8 @@ Use the below snippet in the browser DevTools console to automatically merge and
 transform into a bookmarklet all of the snippets in this document.
 
 ```javascript
-// Display in an prompt to avoid escaping and for easy copy-paste
-prompt(
-  'Copy-paste to bookmarklet URL:',
+// Use this to avoid trimming or escaping in console, alert, prompt etc. and document-not-focused with Clipboard API
+document.querySelector('.highlight pre').textContent =
 
   // Introduce the void function to self-invoke the bookmark
   'javascript:void function() {' +
@@ -32,8 +31,9 @@ prompt(
     .replace(/\n\s*/g, '')
 
     // Close the void function and make it self-call
-    + '}()'
-)
+    + '}()';
+
+document.querySelector('.highlight clipboard-copy').value = document.querySelector('.highlight pre').textContent;
 ```
 
 ## 80 & 120 Character Rulers
