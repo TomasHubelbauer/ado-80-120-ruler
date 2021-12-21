@@ -114,5 +114,5 @@ function presentUi(...content) {
   .reduce((accumulator, current) => [...accumulator, current], [document.createElement('br'), 'Unused reference links:'])
 
   // Insert the header and the individual list items to the hijacked UI area
-  .forEach(presentUi);
+  .forEach(item => presentUi(item));
 ```
