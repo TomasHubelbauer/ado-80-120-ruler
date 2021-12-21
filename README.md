@@ -1,10 +1,34 @@
 # Azure DevOps Wiki Editor Bookmarklet
 
-Save this as a bookmarklet in your browser's bookmark bar. Get the single-line
-version by running the below script in the browser DevTools console:
+Save these as a bookmarklets in your browser's bookmark bar by wrapping them in
+`javascript:void function() { ... }` and making them single-line.
+
+Use the below snippet in the browser DevTools console to automatically merge and
+transform into a bookmarklet all of the snippets in this document.
 
 ```javascript
-document.querySelector('.highlight:last-child').textContent.replace(/\n\s*/g, '')
+// Make a javascript: protocol URL with void function bookmarklet
+'javascript:void function() {' +
+
+// Collect and transform the snippets' contents
+[...document.querySelectorAll('.highlight')]
+  // Skip the fenced code block for this script itself
+  .slice(1)
+
+  // Extract the individual snippets' text content
+  .map(div => div.textContent)
+
+  // Join the text contents into a single script
+  .join('')
+
+  // Transform all comments to be single-line friendly
+  .replace(/(^|\n\s*)\/\/\s?(?<comment>.+)(\n|$)/g, '/* $<comment> */')
+
+  // Replace newlines and whitespace to make single-line bookmarklet
+  .replace(/\n\s*/g, '')
+
+  // Close the void function and make it self-call
+  + '}()'
 ```
 
 ## 80 & 120 Character Rulers
@@ -22,7 +46,7 @@ document.querySelector('textarea').style.background = `
     transparent 120ch,
     silver calc(120ch + 1px), transparent 0
   )
-`
+`;
 ```
 
 ## Unused Reference Links
@@ -52,5 +76,5 @@ document.querySelector('textarea').style.background = `
   }, [''])
 
   // Call forEach on the combined result and present it to the user
-  .forEach(result => result && alert('Unused reference links:\n' + result))
+  .forEach(result => result && alert('Unused reference links:\n' + result));
 ```
