@@ -81,6 +81,10 @@ function presentUi(...content) {
 
   markdownRenderArea.append(...content);
 }
+
+if (markdownRenderArea.firstChild?.dataset.adoBookmarklet === 'true') {
+  button.click();
+}
 ```
 
 ## Unused Reference Links
