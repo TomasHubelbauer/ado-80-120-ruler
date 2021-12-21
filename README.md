@@ -7,32 +7,32 @@ Use the below snippet in the browser DevTools console to automatically merge and
 transform into a bookmarklet all of the snippets in this document.
 
 ```javascript
-// Display in an alert instead of console to avoid escaping
-alert(
+// Display in an prompt to avoid escaping and for easy copy-paste
+prompt(
+  'Copy-paste to bookmarklet URL:',
 
-// Introduce the void function to self-invoke the bookmark
-'javascript:void function() {' +
+  // Introduce the void function to self-invoke the bookmark
+  'javascript:void function() {' +
 
-// Collect and transform the snippets' contents
-[...document.querySelectorAll('.highlight')]
-  // Skip the fenced code block for this script itself
-  .slice(1)
+  // Collect and transform the snippets' contents
+  [...document.querySelectorAll('.highlight')]
+    // Skip the fenced code block for this script itself
+    .slice(1)
 
-  // Extract the individual snippets' text content
-  .map(div => div.textContent)
+    // Extract the individual snippets' text content
+    .map(div => div.textContent)
 
-  // Join the text contents into a single script
-  .join('')
+    // Join the text contents into a single script
+    .join('')
 
-  // Transform all comments to be single-line friendly
-  .replace(/(^|\n\s*)\/\/\s?(?<comment>.+)(\n|$)/g, '/* $<comment> */')
+    // Transform all comments to be single-line friendly
+    .replace(/(^|\n\s*)\/\/\s?(?<comment>.+)(\n|$)/g, '/* $<comment> */')
 
-  // Replace newlines and whitespace to make single-line bookmarklet
-  .replace(/\n\s*/g, '')
+    // Replace newlines and whitespace to make single-line bookmarklet
+    .replace(/\n\s*/g, '')
 
-  // Close the void function and make it self-call
-  + '}()'
-
+    // Close the void function and make it self-call
+    + '}()'
 )
 ```
 
