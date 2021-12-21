@@ -7,7 +7,10 @@ Use the below snippet in the browser DevTools console to automatically merge and
 transform into a bookmarklet all of the snippets in this document.
 
 ```javascript
-// Make a javascript: protocol URL with void function bookmarklet
+// Display in an alert instead of console to avoid escaping
+alert(
+
+// Introduce the void function to self-invoke the bookmark
 'javascript:void function() {' +
 
 // Collect and transform the snippets' contents
@@ -29,6 +32,8 @@ transform into a bookmarklet all of the snippets in this document.
 
   // Close the void function and make it self-call
   + '}()'
+
+)
 ```
 
 ## 80 & 120 Character Rulers
