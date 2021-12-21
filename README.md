@@ -87,36 +87,60 @@ if (markdownRenderArea.firstChild?.dataset.adoBookmarklet === 'true') {
 }
 ```
 
-## Unused Reference Links
+## Reference Links Summary
 
 ```javascript
-// Detect MarkDown reference links with no usages and show a summary
+// Summarize MarkDown reference links with their usages and duplicate detection
 
 // Find all MarkDown reference link definitions in the ADO wiki editor
 [...document.querySelector('textarea').value.matchAll(/(^|\n)(?<outer>\[(?<inner>.+)\]):/g)]
 
-  // Keep the ones which do not have any usage in the MarkDown document
-  .filter(match => match.input.indexOf(']' + match.groups.outer) === -1)
+  // Tranform to include line numbers, usages and duplicate information
+  .map((match, index, array) => {
+    const link = match.groups.inner;
+    const line = [...match.input.slice(0, match.index).matchAll(/\n/g)].length;
+    const original = array.findIndex(item => item.groups.inner === link);
+    const dupe = original !== index ? original : undefined;
 
-  // Expand matches with line numer and duplicate detection result
-  .map((match, index, array) => ({
-    link: match.groups.inner,
-    line: [...match.input.slice(0, match.index).matchAll(/\n/g)].length,
-    original: array.findIndex(item => item.groups.inner === match.groups.inner),
-    index
-  }))
-  
-  .map(item => {
-    const dupe = item.original !== item.index ? ` - DUPLICATE! of line ${array[item.original].line}` : '';
-    
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping
+    const regex = link.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const usages = [...match.input.matchAll(new RegExp(`([^\n^]\\[${regex}\\]|[\n^]\\[${regex}\\][^:]|\\]\\[${regex}\\])`, 'g'))].map(match => {
+      const text = match[0];
+      const line = [...match.input.slice(0, match.index).matchAll(/\n/g)].length;
+      return { text, line };
+    });
+
+    return { link, line, dupe, usages };
+  })
+
+  // Transform to an HTML li element to present in the UI
+  .map((link, index, array) => {
     const li = document.createElement('li');
-    li.textContent = `${item.link} (line ${item.line})${dupe}`;
+    li.textContent = `${link.link} (${link.line})`;
+
+    if (link.dupe !== undefined) {
+      li.textContent += ` | duplicate (${array[link.dupe].line})`;
+    }
+
+    if (link.usages.length === 0) {
+      li.textContent += ' | unused';
+    }
+    else {
+      li.textContent += ` | used ${link.usages.length}x (${link.usages.map(usage => usage.line).join(', ')})`;
+    }
+
     return li;
   })
 
   // Prepend the header for the UI section before the actual list items
-  .reduce((accumulator, current) => [...accumulator, current], [document.createElement('br'), 'Unused reference links:'])
+  .reduce((accumulator, current) => [...accumulator, current], [document.createElement('br'), 'Links:'])
 
   // Insert the header and the individual list items to the hijacked UI area
   .forEach(item => presentUi(item));
 ```
+
+## To-Do
+
+### Add a script for summarizing to-do items in the document
+
+### Add a script for adorning the textarea with line numbers
