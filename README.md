@@ -72,13 +72,13 @@ button.onclick = () => {
   document.execCommand('insertHTML', false, text);
 };
 
-function presentUi(content) {
+function presentUi(...content) {
   if (markdownRenderArea.firstChild !== button) {
     markdownRenderArea.innerHTML = '';
     markdownRenderArea.append(button);
   }
 
-  markdownRenderArea.append(content);
+  markdownRenderArea.append(...content);
 }
 ```
 
@@ -109,5 +109,5 @@ function presentUi(content) {
   }, [''])
 
   // Call forEach on the combined result and present it to the user
-  .forEach(result => result && alert('Unused reference links:\n' + result));
+  .forEach(result => result && presentUi(document.createElement('hr'), 'Unused reference links:\n' + result));
 ```
