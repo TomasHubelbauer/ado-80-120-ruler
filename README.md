@@ -64,6 +64,7 @@ const textarea = document.querySelector('textarea');
 
 const button = document.createElement('button');
 button.className = 'bolt-button';
+button.dataset.adoBookmarklet = true;
 button.textContent = 'Reset';
 button.onclick = () => {
   const text = textarea.value;
@@ -73,7 +74,7 @@ button.onclick = () => {
 };
 
 function presentUi(...content) {
-  if (markdownRenderArea.firstChild !== button) {
+  if (markdownRenderArea.firstChild?.dataset.adoBookmarklet !== 'true') {
     markdownRenderArea.innerHTML = '';
     markdownRenderArea.append(button);
   }
