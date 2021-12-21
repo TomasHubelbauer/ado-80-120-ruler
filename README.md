@@ -100,14 +100,18 @@ function presentUi(...content) {
     original: array.findIndex(item => item.groups.inner === match.groups.inner),
     index
   }))
-
-  // Combine into a single-item array to call forEach with the whole result
-  .reduce((value, item, _index, array) => {
+  
+  .map(item => {
     const dupe = item.original !== item.index ? ` - DUPLICATE! of line ${array[item.original].line}` : '';
-    value[0] += `- ${item.link} (line ${item.line})${dupe}\n`;
-    return value;
-  }, [''])
+    
+    const li = document.createElement('li');
+    li.textContent = `${item.link} (line ${item.line})${dupe}`;
+    return li;
+  })
 
-  // Call forEach on the combined result and present it to the user
-  .forEach(result => result && presentUi(document.createElement('hr'), 'Unused reference links:\n' + result));
+  // Prepend the header for the UI section before the actual list items
+  .reduce((accumulator, current) => [...accumulator, current], [document.createElement('br'), 'Unused reference links:'])
+
+  // Insert the header and the individual list items to the hijacked UI area
+  .forEach(presentUi);
 ```
