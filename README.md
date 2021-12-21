@@ -54,6 +54,34 @@ document.querySelector('textarea').style.background = `
 `;
 ```
 
+### MarkDown Render Area UI Hijack
+
+```javascript
+// Hijack the MarkDown preview render area to display custom UI by other scripts
+
+const markdownRenderArea = document.querySelector('.markdown-render-area');
+const textarea = document.querySelector('textarea');
+
+const button = document.createElement('button');
+button.className = 'bolt-button';
+button.textContent = 'Reset';
+button.onclick = () => {
+  const text = textarea.value;
+  textarea.select();
+  document.execCommand('insertHTML', false, '');
+  document.execCommand('insertHTML', false, text);
+};
+
+function presentUi(content) {
+  if (markdownRenderArea.firstChild !== button) {
+    markdownRenderArea.innerHTML = '';
+    markdownRenderArea.append(button);
+  }
+
+  markdownRenderArea.append(content);
+}
+```
+
 ## Unused Reference Links
 
 ```javascript
