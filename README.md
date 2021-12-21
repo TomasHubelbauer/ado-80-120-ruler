@@ -10,7 +10,8 @@ document.querySelector('.highlight:last-child').textContent.replace(/\n\s*/g, ''
 ## 80 & 120 Character Rulers
 
 ```javascript
-javascript:
+/* Display lines for 0, 80 and 120 character columns */
+
 void function() {
   document.querySelector('textarea').style.background = `
     linear-gradient(to right,
@@ -29,6 +30,8 @@ void function() {
 ## Unused Reference Links
 
 ```javascript
+/* Detect MarkDown reference links with no usages and show a summary */
+
 // Find all MarkDown reference link definitions in the ADO wiki editor
 [...document.querySelector('textarea').value.matchAll(/(^|\n)(?<outer>\[(?<inner>.+)\]):/g)]
 
