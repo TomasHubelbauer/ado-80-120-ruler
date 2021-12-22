@@ -151,55 +151,72 @@ Introduce tab buttons atop the MarkDown render or in the tool bar and make
 clicking them change the right pane between MarkDown render and the tool UI.
 
 ```javascript
-const markDownPreviewElement = document.querySelector('.markdown-preview');
-const commandBarSideCommandsElement = document.querySelector('.ms-CommandBar-sideCommands');
+function makeTab(name, icon, contentDiv) {
+  const div = document.createElement('div');
+  div.className = 'markdowntoolbar-button';
+  div.dataset.bookmarkletTab = name;
 
-const summaryDiv = document.createElement('div');
-summaryDiv.style.display = 'none';
-summaryDiv.textContent = 'todo';
-markDownPreviewElement.insertAdjacentElement('beforebegin', summaryDiv);
+  const button = document.createElement('button');
+  button.className = 'ms-CommandBarItem-link';
+  button.addEventListener('click', () => selectTab(name));
 
-const previewTabDiv = document.createElement('div');
-previewTabDiv.className = 'markdowntoolbar-button is_checked';
+  // https://fontdrop.info AzDevMDL2.woff https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font#icon-list
+  const i = document.createElement('i');
+  i.className = 'ms-CommandBarItem-icon root-41';
+  i.textContent = icon;
 
-const previewTabButton = document.createElement('button');
-previewTabButton.className = 'ms-CommandBarItem-link';
-previewTabButton.addEventListener('click', () => {
-  summaryDiv.style.display = 'none';
-  markDownPreviewElement.style.display = 'initial';
+  const span = document.createElement('span');
+  span.style = 'position: relative; top: -1ex;';
 
-  summaryTabDiv.classList.toggle('is_checked', false);
-  previewTabDiv.classList.toggle('is_checked', true);
-});
+  button.append(i, span);
+  div.append(button);
+  document.querySelector('.ms-CommandBar-sideCommands').insertAdjacentElement('afterbegin', div);
 
-const previewTabI = document.createElement('i');
-previewTabI.className = 'ms-CommandBarItem-icon root-41';
-previewTabI.textContent = '\uE736'; // https://fontdrop.info AzDevMDL2.woff https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font#icon-list
+  if (!contentDiv) {
+    contentDiv = document.createElement('div');
+    contentDiv.style.display = 'none';
+    contentDiv.textContent = name;
+    document.querySelector('.markdown-preview').insertAdjacentElement('beforebegin', contentDiv);
+  }
 
-previewTabButton.append(previewTabI);
-previewTabDiv.append(previewTabButton);
-commandBarSideCommandsElement.insertAdjacentElement('afterbegin', previewTabDiv);
+  contentDiv.dataset.bookmarkletTabContent = name;
+}
 
-const summaryTabDiv = document.createElement('div');
-summaryTabDiv.className = 'markdowntoolbar-button';
+function selectTab(name) {
+  const tabContents = document.querySelectorAll('[data-bookmarklet-tab-content]');
+  for (const tabContent of tabContents) {
+    tabContent.style.display = 'none';
+  }
 
-const summaryTabButton = document.createElement('button');
-summaryTabButton.className = 'ms-CommandBarItem-link';
-summaryTabButton.addEventListener('click', () => {
-  markDownPreviewElement.style.display = 'none';
-  summaryDiv.style.display = 'initial';
+  document.querySelector(`[data-bookmarklet-tab-content="${name}"]`).style.display = 'initial';
 
-  previewTabDiv.classList.toggle('is_checked', false);
-  summaryTabDiv.classList.toggle('is_checked', true);
-});
+  const tabs = document.querySelectorAll('[data-bookmarklet-tab]');
+  for (const tab of tabs) {
+    tab.classList.toggle('is_checked', false);
+  }
 
-const summaryTabI = document.createElement('i');
-summaryTabI.className = 'ms-CommandBarItem-icon root-41';
-summaryTabI.textContent = '\uE754'; // https://fontdrop.info AzDevMDL2.woff https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font#icon-list
+  document.querySelector(`[data-bookmarklet-tab="${name}"]`).classList.toggle('is_checked', true);
+}
 
-summaryTabButton.append(summaryTabI);
-summaryTabDiv.append(summaryTabButton);
-commandBarSideCommandsElement.insertAdjacentElement('afterbegin', summaryTabDiv);
+function updateTabIcon(name, icon, badge) {
+  document.querySelector(`[data-bookmarklet-tab="${name}"] i`).textContent = icon;
+  document.querySelector(`[data-bookmarklet-tab="${name}"] span`).textContent = badge;
+}
+
+function updateTab(name, ...contents) {
+  document.querySelector(`[data-bookmarklet-tab-content="${name}"]`).innerHTML = '';
+  document.querySelector(`[data-bookmarklet-tab-content="${name}"]`).append(...contents);
+}
+
+makeTab('links', '\uF302'); // F302 all used/F303 some unused + badge
+updateTabIcon('links', '\uF303', 2);
+updateTab('links', 'this is the tab for links');
+
+makeTab('todos', '\uE73A'); // E73A all done/E762 some undone + badge
+updateTabIcon('todos', '\uE762', 3);
+updateTab('todos', 'this is the tab for todos');
+
+makeTab('render', '\uE8A1', document.querySelector('.markdown-preview'));
 ```
 
 ### Update link summary title to include the number of unused links if any
