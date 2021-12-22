@@ -150,6 +150,58 @@ if (markdownRenderArea.firstChild?.dataset.adoBookmarklet === 'true') {
 Introduce tab buttons atop the MarkDown render or in the tool bar and make
 clicking them change the right pane between MarkDown render and the tool UI.
 
+```javascript
+const markDownPreviewElement = document.querySelector('.markdown-preview');
+const commandBarSideCommandsElement = document.querySelector('.ms-CommandBar-sideCommands');
+
+const summaryDiv = document.createElement('div');
+summaryDiv.style.display = 'none';
+summaryDiv.textContent = 'todo';
+markDownPreviewElement.insertAdjacentElement('beforebegin', summaryDiv);
+
+const previewTabDiv = document.createElement('div');
+previewTabDiv.className = 'markdowntoolbar-button is_checked';
+
+const previewTabButton = document.createElement('button');
+previewTabButton.className = 'ms-CommandBarItem-link';
+previewTabButton.addEventListener('click', () => {
+  summaryDiv.style.display = 'none';
+  markDownPreviewElement.style.display = 'initial';
+
+  summaryTabDiv.classList.toggle('is_checked', false);
+  previewTabDiv.classList.toggle('is_checked', true);
+});
+
+const previewTabI = document.createElement('i');
+previewTabI.className = 'ms-CommandBarItem-icon root-41';
+previewTabI.textContent = '\uE736'; // https://fontdrop.info AzDevMDL2.woff https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font#icon-list
+
+previewTabButton.append(previewTabI);
+previewTabDiv.append(previewTabButton);
+commandBarSideCommandsElement.insertAdjacentElement('afterbegin', previewTabDiv);
+
+const summaryTabDiv = document.createElement('div');
+summaryTabDiv.className = 'markdowntoolbar-button';
+
+const summaryTabButton = document.createElement('button');
+summaryTabButton.className = 'ms-CommandBarItem-link';
+summaryTabButton.addEventListener('click', () => {
+  markDownPreviewElement.style.display = 'none';
+  summaryDiv.style.display = 'initial';
+
+  previewTabDiv.classList.toggle('is_checked', false);
+  summaryTabDiv.classList.toggle('is_checked', true);
+});
+
+const summaryTabI = document.createElement('i');
+summaryTabI.className = 'ms-CommandBarItem-icon root-41';
+summaryTabI.textContent = '\uE754'; // https://fontdrop.info AzDevMDL2.woff https://docs.microsoft.com/en-us/windows/apps/design/style/segoe-ui-symbol-font#icon-list
+
+summaryTabButton.append(summaryTabI);
+summaryTabDiv.append(summaryTabButton);
+commandBarSideCommandsElement.insertAdjacentElement('afterbegin', summaryTabDiv);
+```
+
 ### Update link summary title to include the number of unused links if any
 
 Sort by usage count so unused appear first if there are any, if not, sort by
