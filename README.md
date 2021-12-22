@@ -144,3 +144,13 @@ if (markdownRenderArea.firstChild?.dataset.adoBookmarklet === 'true') {
 ### Add a script for summarizing to-do items in the document
 
 ### Add a script for adorning the textarea with line numbers
+
+### Make the UI thing not be a hijack but instead a tabbed UI for render/tool
+
+Introduce tab buttons atop the MarkDown render or in the tool bar and make
+clicking them change the right pane between MarkDown render and the tool UI.
+
+### Update link summary title to include the number of unused links if any
+
+Sort by usage count so unused appear first if there are any, if not, sort by
+line number (the default).
