@@ -238,3 +238,9 @@ that scenario the third pane would not fit side by side anymore.
 1. Make `.wiki-md-container` flex
 2. Set `.markdown-content` width to 600px
 3. Add another child to `.wiki-md-container` for the extra pane
+
+### Add a GitHub Pages site for easy minification of the individual snippets
+
+Right now minification requires opening the Dev Tools and running a certain
+snippet within the GitHub.com context. A dedicated GitHub Pages site would make
+things more interactive.
