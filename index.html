@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ADO Bookmarklet</title>
+    <script>
+      window.addEventListener('load', async () => {
+        try {
+          const response = await fetch('readme.md');
+          const text = await response.text();
+          alert(text);
+        }
+        catch (error) {
+          alert(error.message);
+        }
+      });
+    </script>
+  </head>
+  <body>
+  
+  </body>
+</html>
