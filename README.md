@@ -223,3 +223,18 @@ makeTab('render', '\uE8A1', document.querySelector('.markdown-preview'));
 
 Sort by usage count so unused appear first if there are any, if not, sort by
 line number (the default).
+
+### Consider adding a separate pane to the right of MarkDown content render
+
+With 80 characters per line of the MarkDown source, the MarkDown content can be
+capped to about 600px without any disruption of the content. Links will break
+and images will presumably shrink, but those should have the 500px width set in
+MarkDown anyway.
+
+This leaves room for a pane that could sit side by side with the render and
+show stats. In edit mode, the above solution with tabs would make sense as in
+that scenario the third pane would not fit side by side anymore.
+
+1. Make `.wiki-md-container` flex
+2. Set `.markdown-content` width to 600px
+3. Add another child to `.wiki-md-container` for the extra pane
