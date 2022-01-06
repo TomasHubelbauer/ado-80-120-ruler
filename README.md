@@ -244,3 +244,9 @@ that scenario the third pane would not fit side by side anymore.
 Right now minification requires opening the Dev Tools and running a certain
 snippet within the GitHub.com context. A dedicated GitHub Pages site would make
 things more interactive.
+
+Restructure the readme to have sections/links for the snippets which will sit in
+their own `.js` files. The index page downloads `README.md` now and it will read
+out the links and fetch the individual scripts. Then it will show a text area
+for each and on change of each text area will generate the final snippet in its
+own text area for easy copying.
